@@ -15,29 +15,30 @@ The project starts as a clean Flask application, then grows feature by feature i
 - Dynamic expense tracking with Flask
 - Categorised expenses
 - Clean dark UI with green accent theme
+- User authentication and account management
+- SQLite database integration
+- Add, view and delete expenses
+- Dynamic expense table using Flask and Jinja2
 
 ---
 
 ## 🚧 Features in Progress
 
 - Analytics dashboard
-- Edit and delete expenses
+- Edit expenses
 - Search and filtering
-- SQLite database integration
-- User authentication
 - Spending charts and visualisations
 
 ---
 
 ## 🛠️ Tech Stack
 
-- Python
-- Flask
-- HTML5
-- CSS3
-- Jinja2
-- Git & GitHub
-
+- **Backend:** Python, Flask
+- **Frontend:** HTML, CSS, JavaScript
+- **Database:** SQLite
+- **ORM:** SQLAlchemy
+- **Templating:** Jinja2
+- **Development:** Visual Studio Code, Git, GitHub
 ---
 
 ## 📂 Project Structure
@@ -58,6 +59,21 @@ SmartSpend/
 
 ---
 
+## What I Learned
+
+Through building SmartSpend, I developed experience with:
+
+- Building a web application using Flask
+- Connecting a Python backend to a SQLite database
+- Designing and querying database models with SQLAlchemy
+- Using Jinja2 to dynamically display database data
+- Implementing user authentication
+- Using JavaScript to create interactive features
+- Structuring a project using separate templates, models and routes
+- Using Git and GitHub for version control
+
+---
+
 ## 📸 Screenshots
 
 ## Home
@@ -74,12 +90,20 @@ SmartSpend/
 
 ---
 
-## 🎯 Future Goals
+## 🎯 Roadmap
 
-- Store expenses using SQLite
-- Build interactive analytics
-- Add secure user authentication
-- Deploy the application online
+- [x] User authentication
+- [x] Add expenses
+- [x] Display expenses
+- [x] Delete expenses
+- [x] Expense categories
+- [ ] Search expenses
+- [ ] Category and date filtering
+- [ ] Dynamic spending analytics
+- [ ] Edit expenses
+- [ ] Data visualisations
+- [ ] Budget tracking
+- [ ] Deploy application
 
 ---
 

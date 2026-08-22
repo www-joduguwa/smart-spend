@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}SmartSpend | Sign Up{% endblock %}
+
+{% block content %}
+<section class="s-auth-page-section">
+        <form class="auth-card" method="post" action="#">
+            <div class="auth-card-header">
+                <h2>Create your account</h2>
+                <p>Choose a username, add your email, and set a strong password.</p>
+            </div>
+
+            <label for="signup-name">First Name</label>
+            <input type="text" id="signup-name" name="fname" placeholder="John" required>
+
+            <label for="signup-name">First Name</label>
+            <input type="text" id="signup-name" name="lname" placeholder="Doe" required>
+
+            <label for="signup-email">Email address</label>
+            <input type="email" id="signup-email" name="email" placeholder="you@example.com" required>
+
+            <label for="signup-password">Password</label>
+            <input type="password" id="signup-password" name="password" placeholder="Create password" required>
+
+            <button type="submit" class="button tertiary">Sign up</button>
+
+            <div class="auth-card-footer">
+            <p>Already have an account? <a class="alt-text" href="{{ url_for('login') }}">Login</a></p>
+            </div>
+        </form>
+    </div>
+</section>
+{% endblock %}

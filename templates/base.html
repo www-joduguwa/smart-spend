@@ -10,18 +10,63 @@
     <header class="site-header">
         <nav class="nav">
            <a class="brand-link" href="{{ url_for('home') }}">
-    <span class="brand-text">
-        <svg class="logo" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chart-no-axes-combined-icon lucide-chart-no-axes-combined"><path d="M12 16v5"/><path d="M16 14.639V21"/><path d="M20 10.656V21"/><path d="m22 3-8.646 8.646a.5.5 0 0 1-.708 0L9.354 8.354a.5.5 0 0 0-.707 0L2 15"/><path d="M4 18.463V21"/><path d="M8 14.656V21"/></svg>
-        <span class="smart">Smart</span><span class="spend">Spend</span>
-    </span>
-    </a>
+                <span class="brand-text">
+                    <svg class="logo" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chart-no-axes-combined-icon lucide-chart-no-axes-combined"><path d="M12 16v5"/><path d="M16 14.639V21"/><path d="M20 10.656V21"/><path d="m22 3-8.646 8.646a.5.5 0 0 1-.708 0L9.354 8.354a.5.5 0 0 0-.707 0L2 15"/><path d="M4 18.463V21"/><path d="M8 14.656V21"/></svg>
+                    <span class="smart">Smart</span><span class="spend">Spend</span>
+                </span>
+            </a>
             <div class="nav-links" aria-label="Primary navigation">
+                {% if current_user.is_authenticated %}
+                <a href="{{ url_for('dashboard') }}">Dashboard</a>
+                <a href="{{ url_for('expenses') }}">Expenses</a>
+                <a href="{{ url_for('analytics') }}">Analytics</a>
+                {% else %}
                 <a href="{{ url_for('home') }}">Home</a>
                 <a href="{{ url_for('dashboard') }}">Dashboard</a>
                 <a href="{{ url_for('expenses') }}">Expenses</a>
                 <a href="{{ url_for('analytics') }}">Analytics</a>
+                {% endif %}
             </div>
+            {% if current_user.is_authenticated %}
+                <div class="account-nav">
+                    <details class="account-menu">
+                        <summary class="account-trigger" aria-label="Open account menu">
+                            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21a8 8 0 0 0-16 0"/><circle cx="12" cy="7" r="4"/></svg>
+                            <span>{{ current_user.first_name or 'Account' }}</span>
+                        </summary>
+                        <div class="account-dropdown">
+                            <div class="account-summary">
+                                <span>Signed in as</span>
+                                <strong>{{ current_user.email }}</strong>
+                            </div>
+                            <a href="{{ url_for('dashboard') }}">Dashboard</a>
+                            <a href="{{ url_for('expenses') }}">My expenses</a>
+                            <a class="logout-link" href="{{ url_for('logout') }}">Log out</a>
+                        </div>
+                    </details>
+                </div>
+            {% else %}
+                <a class="nav-login" href="{{ url_for('login') }}">
+                    <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21a8 8 0 0 0-16 0"/><circle cx="12" cy="7" r="4"/></svg>
+                    <span>Log in</span>
+                </a>
+            {% endif %}
         </nav>
+        
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-stack" aria-live="polite" aria-atomic="true">
+                    {% for category, message in messages %}
+                        <div class="flash-message flash-message--{{ category }}" role="alert">
+                            <span class="flash-icon" aria-hidden="true"></span>
+                            <p>{{ message }}</p>
+                            <button class="flash-close" type="button" aria-label="Dismiss notification">&times;</button>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
     </header>
 
     <main>

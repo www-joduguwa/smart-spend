@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}SmartSpend | Login{% endblock %}
+
+{% block content %}
+<section class="auth-page-section">
+    <form class="auth-card" method="post" action="#">
+        <div class="auth-card-header">
+            <h2>Sign in</h2>
+            <p>Enter your email and password to access your dashboard.</p>
+        </div>
+
+        <label for="login-email">Email address</label>
+        <input type="email" id="login-email" name="email" placeholder="you@example.com" required>
+
+        <label for="login-password">Password</label>
+        <input type="password" id="login-password" name="password" placeholder="Enter password" required>
+
+        <button type="submit" class="button tertiary">Login</button>
+        <div class="auth-card-footer">
+            <p>Don't have an account? <a class="alt-text" href="{{ url_for('signup') }}">Register</a></p>
+        </div>
+    </form>
+</section>
+{% endblock %}
