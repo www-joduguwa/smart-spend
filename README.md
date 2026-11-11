@@ -1,6 +1,6 @@
 # 💸 SmartSpend
 
-SmartSpend is a personal finance analytics platform built with **Flask**, **SQLite**, and vanilla web technologies. It helps users track expenses, monitor spending, and gain insights into their financial habits.
+SmartSpend is a personal finance analytics platform built with **Flask**, **SQLAlchemy**, and vanilla web technologies. It helps users track expenses, monitor spending, and gain insights into their financial habits.
 
 
 The project starts as a clean Flask application, then grows feature by feature into a cutting-edge web application for expense tracking, analytics, and future machine learning experiments.
@@ -17,17 +17,17 @@ The project starts as a clean Flask application, then grows feature by feature i
 - Clean dark UI with green accent theme
 - User authentication and account management
 - SQLite database integration
-- Add, view and delete expenses
+- Add, view, edit and delete expenses
 - Dynamic expense table using Flask and Jinja2
+- Spending charts and visualisations
+- Analytics dashboard
 
 ---
 
 ## 🚧 Features in Progress
 
-- Analytics dashboard
-- Edit expenses
 - Search and filtering
-- Spending charts and visualisations
+- AI insights
 
 ---
 
@@ -47,9 +47,19 @@ The project starts as a clean Flask application, then grows feature by feature i
 SmartSpend/
 │
 ├── app.py
+├── models.py
 ├── database.py
 ├── schema.sql
 ├── templates/
+│   ├── add_expense.html/
+│   ├── analytics.html/
+│   ├── base.html/
+│   ├── edit_expense.html/
+│   ├── dashboard.html/
+│   ├── expenses.html/
+│   ├── home.html/
+│   ├── login.html/
+│   └── signup.html/
 ├── static/
 │   ├── css/
 │   ├── js/
@@ -100,8 +110,8 @@ Through building SmartSpend, I developed experience with:
 - [ ] Search expenses
 - [ ] Category and date filtering
 - [ ] Dynamic spending analytics
-- [ ] Edit expenses
-- [ ] Data visualisations
+- [x] Edit expenses
+- [x] Data visualisations
 - [ ] Budget tracking
 - [ ] Deploy application
 

@@ -17,25 +17,80 @@
                     <label for="expense-title">Expense Title</label><br>
                     <input type="text" placeholder="e.g. Lunch at Starbucks" id="expense-title" name="title" required><br>
                     
-                    <label for="category">Category</label><br>
-                    <select type="text" id="category" name="category" required>
-                        <option value="" disabled selected hidden>Select Category</option>
-                        <option value="Food">Food</option>
-                        <option value="Transport">Transport</option>
-                        <option value="Subscription">Subscription</option>
-                        <option value="Shopping">Shopping</option>
-                        <option value="Entertainment">Entertainment</option>
-                        <option value="Bills">Bills</option>
-                        <option value="Other">Other</option>
-                    </select>
+                    <label>Category</label><br>
+                    <div class="form-category-picker">
+                        <details class="category-menu">
+                            <summary class="category-trigger">
+                                <span id="selectedCategory">Select Category</span>
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="20"
+                                    height="20"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path d="m6 9 6 6 6-6"/>
+                                </svg>
+                            </summary>
+                            <div class="category-dropdown">
+                                <button type="button" data-category="Food">Food</button>
+                                <button type="button" data-category="Transport">Transport</button>
+                                <button type="button" data-category="Subscription">Subscription</button>
+                                <button type="button" data-category="Shopping">Shopping</button>
+                                <button type="button" data-category="Entertainment">Entertainment</button>
+                                <button type="button" data-category="Bills">Bills</button>
+                                <button type="button" data-category="Other">Other</button>
+                            </div>
+                        </details>
+                        <input type="hidden" id="category" name="category" required>
+                    </div>
                 </div>
-
                 <div>
                     <label for="amount">Amount</label><br>
                     <input type="number" step="any" id="amount" name="amount" placeholder="0.00" required><br>
 
-                    <label for="date">Date</label><br>
-                    <input type="date" id="date" name="date" required>
+                    <label for="dateInput">Date</label>
+                    <div class="form-date-picker">
+                        <div class="date-input-wrapper">
+                            <input type="text" id="dateInput" placeholder="Select a date" readonly>
+                            <button type="button" id="calendarToggle" class="calendar-toggle" aria-label="Open calendar">
+                                <svg viewBox="0 0 24 24" aria-hidden="true">
+                                    <rect x="3" y="4" width="18" height="17" rx="2"></rect>
+                                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                                    <line x1="3" y1="9" x2="21" y2="9"></line>
+                                </svg>
+                            </button>
+                        </div>
+                        <input type="hidden" id="date" name="date" required>
+                        <div class="calendar" id="calendar">
+                            <div class="calendar-header">
+                                <button type="button" class="month-btn" id="prevMonth">
+                                    ‹
+                                </button>
+                                <div class="month-year" id="monthYear"></div>
+                                <button type="button" class="month-btn" id="nextMonth">
+                                    ›
+                                </button>
+                            </div>
+                            <div class="weekdays">
+                                <span>Sun</span>
+                                <span>Mon</span>
+                                <span>Tue</span>
+                                <span>Wed</span>
+                                <span>Thu</span>
+                                <span>Fri</span>
+                                <span>Sat</span>
+                            </div>
+                            <div class="calendar-days" id="calendarDays"></div>
+                            <button type="button" class="today-btn" id="todayBtn">
+                                Today
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -77,5 +132,360 @@
          </div>
     </div>
 </section>
+
+
+<script>
+
+const dateInput = document.getElementById("dateInput");
+const dateValue = document.getElementById("date");
+
+const calendar = document.getElementById("calendar");
+const calendarToggle = document.getElementById("calendarToggle");
+
+const monthYear = document.getElementById("monthYear");
+const calendarDays = document.getElementById("calendarDays");
+
+const prevMonth = document.getElementById("prevMonth");
+const nextMonth = document.getElementById("nextMonth");
+const todayBtn = document.getElementById("todayBtn");
+
+let currentDate = new Date();
+let selectedDate = null;
+
+
+/* =========================
+   DATE FORMATTING
+========================= */
+
+/* Format sent to Flask */
+function formatForFlask(date) {
+
+    const year = date.getFullYear();
+
+    const month = String(
+        date.getMonth() + 1
+    ).padStart(2, "0");
+
+    const day = String(
+        date.getDate()
+    ).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+}
+
+
+/* Format displayed to user */
+function formatForDisplay(date) {
+
+    const day = String(
+        date.getDate()
+    ).padStart(2, "0");
+
+    const month = String(
+        date.getMonth() + 1
+    ).padStart(2, "0");
+
+    const year = date.getFullYear();
+
+    return `${day}-${month}-${year}`;
+}
+
+
+/* =========================
+   RENDER CALENDAR
+========================= */
+
+function renderCalendar() {
+
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
+
+    monthYear.textContent =
+        currentDate.toLocaleString(
+            "default",
+            {
+                month: "long",
+                year: "numeric"
+            }
+        );
+
+    calendarDays.innerHTML = "";
+
+
+    const firstDay =
+        new Date(year, month, 1).getDay();
+
+    const daysInMonth =
+        new Date(
+            year,
+            month + 1,
+            0
+        ).getDate();
+
+
+    /* Empty spaces */
+
+    for (
+        let i = 0;
+        i < firstDay;
+        i++
+    ) {
+
+        const emptyDay =
+            document.createElement("div");
+
+        emptyDay.classList.add(
+            "calendar-day",
+            "empty"
+        );
+
+        calendarDays.appendChild(
+            emptyDay
+        );
+    }
+
+
+    /* Days */
+
+    const today = new Date();
+
+    for (
+        let day = 1;
+        day <= daysInMonth;
+        day++
+    ) {
+
+        const button =
+            document.createElement("button");
+
+        button.type = "button";
+
+        button.textContent = day;
+
+        button.classList.add(
+            "calendar-day"
+        );
+
+
+        const thisDate =
+            new Date(
+                year,
+                month,
+                day
+            );
+
+
+        /* Today */
+
+        if (
+            thisDate.toDateString() ===
+            today.toDateString()
+        ) {
+
+            button.classList.add(
+                "today"
+            );
+        }
+
+
+        /* Selected */
+
+        if (
+            selectedDate &&
+            thisDate.toDateString() ===
+            selectedDate.toDateString()
+        ) {
+
+            button.classList.add(
+                "selected"
+            );
+        }
+
+
+        /* Select date */
+
+        button.addEventListener(
+            "click",
+            () => {
+
+                selectedDate =
+                    thisDate;
+
+                /*
+                 * What the user sees
+                 */
+                dateInput.value =
+                    formatForDisplay(
+                        thisDate
+                    );
+
+                /*
+                 * What Flask receives
+                 */
+                dateValue.value =
+                    formatForFlask(
+                        thisDate
+                    );
+
+                calendar.classList.remove(
+                    "active"
+                );
+
+                renderCalendar();
+            }
+        );
+
+
+        calendarDays.appendChild(
+            button
+        );
+    }
+}
+
+
+/* =========================
+   OPEN CALENDAR
+========================= */
+
+calendarToggle.addEventListener(
+    "click",
+    (event) => {
+
+        event.stopPropagation();
+
+        calendar.classList.toggle(
+            "active"
+        );
+
+        renderCalendar();
+    }
+);
+
+
+dateInput.addEventListener(
+    "click",
+    (event) => {
+
+        event.stopPropagation();
+
+        calendar.classList.toggle(
+            "active"
+        );
+
+        renderCalendar();
+    }
+);
+
+
+/* =========================
+   MONTH NAVIGATION
+========================= */
+
+prevMonth.addEventListener(
+    "click",
+    () => {
+
+        currentDate.setMonth(
+            currentDate.getMonth() - 1
+        );
+
+        renderCalendar();
+    }
+);
+
+
+nextMonth.addEventListener(
+    "click",
+    () => {
+
+        currentDate.setMonth(
+            currentDate.getMonth() + 1
+        );
+
+        renderCalendar();
+    }
+);
+
+
+/* =========================
+   TODAY
+========================= */
+
+todayBtn.addEventListener(
+    "click",
+    () => {
+
+        const today = new Date();
+
+        currentDate =
+            new Date(today);
+
+        selectedDate =
+            new Date(today);
+
+        dateInput.value =
+            formatForDisplay(today);
+
+        dateValue.value =
+            formatForFlask(today);
+
+        calendar.classList.remove(
+            "active"
+        );
+
+        renderCalendar();
+    }
+);
+
+
+/* =========================
+   CLOSE OUTSIDE
+========================= */
+
+document.addEventListener(
+    "click",
+    (event) => {
+
+        if (
+            !event.target.closest(
+                ".date-picker"
+            )
+        ) {
+
+            calendar.classList.remove(
+                "active"
+            );
+        }
+    }
+);
+
+
+/* Initial render */
+
+renderCalendar();
+
+
+document.querySelectorAll("[data-category]").forEach(button => {
+
+    button.addEventListener("click", function () {
+
+        const category = this.dataset.category;
+
+        document.getElementById(
+            "selectedCategory"
+        ).textContent = category;
+
+        document.getElementById(
+            "category"
+        ).value = category;
+
+        document.querySelector(
+            ".category-menu"
+        ).removeAttribute("open");
+    });
+
+});
+</script>
+
 
 {% endblock %}

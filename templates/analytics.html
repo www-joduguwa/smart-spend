@@ -1,0 +1,378 @@
+{% extends "base.html" %}
+
+{% block title %}Analytics | SmartSpend{% endblock %}
+
+{% block content %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+<div class="analytics-page">
+    <div class="analytics-header">
+        <div>
+            <h2>Spending Analytics</h2>
+            <p>Visualize your spending and financial trends.</p>
+        </div>    
+        <a class="button tertiary" href="{{ url_for('add_expense') }}" style="margin-left: auto;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-download-icon lucide-download"><path d="M12 15V3"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/></svg>             
+        Export Report
+        </a>
+    </div>
+
+    <div class="analytics-grid">
+
+        <section class="analytics-card spending-card">
+            <div class="card-header">
+                <div>
+                    <h4>Spending Over Time</h4>
+                    <p>Daily spending this month</p>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <div class="dummy-line-chart">
+                    <div class="chart-y-axis">
+                        <span>£40</span>
+                        <span>£30</span>
+                        <span>£20</span>
+                        <span>£10</span>
+                        <span>£0</span>
+                    </div>
+
+                    <div class="chart-area">
+                        <div class="chart-grid-lines">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+
+                        <svg class="line-chart" viewBox="0 0 700 260" preserveAspectRatio="none">
+                            <polyline
+                                points="0,190 70,160 140,180 210,120 280,145 350,95 420,115 490,70 560,100 630,55 700,80"
+                            />
+                        </svg>
+
+                        <div class="chart-x-axis">
+                            <span>1 Aug</span>
+                            <span>7 Aug</span>
+                            <span>14 Aug</span>
+                            <span>21 Aug</span>
+                            <span>28 Aug</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="analytics-card category-card">
+                <div class="card-header">
+                    <h4 style="margin-top: 5px;">Spending by Category</h4>
+                    <div>
+                            <details class="category-menu">
+                                <summary class="category-trigger">
+                                    <span id="selectedCategory">This Month</span>
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="20"
+                                        height="20"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <path d="m6 9 6 6 6-6"/>
+                                    </svg>
+                                </summary>
+                                <div class="category-dropdown">
+                                    <button type="button" data-category="Food">This Month</button>
+                                    <button type="button" data-category="Transport">Last Month</button>
+                                    <button type="button" data-category="Subscription">This Week</button>
+                                    <button type="button" data-category="Shopping">All Time</button>
+                                </div>
+                            </details>
+                            <input type="hidden" id="category" name="category" required>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div>
+                        <canvas id="categoryDonutChart"> </canvas>
+                    </div>
+                    <div class="table">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td class="key"><button class="circle"> </button></td>
+                                    <td class="category">Food</td>
+                                    <td class="tdata">£{{ "%.2f"|format(category_totals["Food"]) }}</td>
+                                    <td class="tdata"><p>{{ "%.1f"|format((category_totals["Food"] / total_spent) * 100) }}%</p></td>
+                                </tr>
+                                <tr>
+                                    <td class="key"><button style="background-color: #60a5fa;" class="circle"> </button></td>
+                                    <td class="category">Transport</td>
+                                    <td class="tdata">£{{ "%.2f"|format(category_totals["Transport"]) }}</td>
+                                    <td class="tdata"><p>{{ "%.1f"|format((category_totals["Transport"] / total_spent) * 100) }}%</p></td>
+                                </tr>
+                                <tr>
+                                    <td class="key"><button style="background-color: #fb923c;" class="circle"> </button></td>
+                                    <td class="category">Shopping</td>
+                                    <td class="tdata">£{{ "%.2f"|format(category_totals["Shopping"]) }}</td>
+                                    <td class="tdata"><p>{{ "%.1f"|format((category_totals["Shopping"] / total_spent) * 100) }}%</p></td>
+                                </tr>
+                                <tr>
+                                    <td class="key"><button style="background-color: #fb3ce5;" class="circle"> </button></td>
+                                    <td class="category">Bills</td>
+                                    <td class="tdata">£{{ "%.2f"|format(category_totals["Bills"]) }}</td>
+                                    <td class="tdata"><p>{{ "%.1f"|format((category_totals["Bills"] / total_spent) * 100) }}%</p></td>
+                                </tr>
+                                <tr>
+                                    <td class="key"><button style="background-color: #fb3c3c;" class="circle"> </button></td>
+                                    <td class="category">Entertainment</td>
+                                    <td class="tdata">£{{ "%.2f"|format(category_totals["Entertainment"]) }}</td>
+                                    <td class="tdata"><p>{{ "%.1f"|format((category_totals["Entertainment"] / total_spent) * 100) }}%</p></td>
+                                </tr>
+                                <tr>
+                                    <td class="key"><button style="background-color: #953cd5;" class="circle"> </button></td>
+                                    <td class="category">Subscription</td>
+                                    <td class="tdata">£{{ "%.2f"|format(category_totals["Subscription"]) }}</td>
+                                    <td class="tdata"><p>{{ "%.1f"|format((category_totals["Subscription"] / total_spent) * 100) }}%</p></td>
+                                </tr>
+                                <tr>
+                                    <td class="key"><button style="background-color: #41d8e8;" class="circle"> </button></td>
+                                    <td class="category">Other</td>
+                                    <td class="tdata">£{{ "%.2f"|format(category_totals["Other"]) }}</td>
+                                    <td class="tdata"><p>{{ "%.1f"|format((category_totals["Other"] / total_spent) * 100) }}%</p></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+        </section>
+
+        <section class="analytics-card comparison-card">
+            <div class="card-header">
+                <div>
+                    <h4>Monthly Comparison</h4>
+                    <p>Current month compared with last month</p>
+                </div>
+            </div>
+
+            <div class="comparison-chart">
+                <canvas id="monthlyComparison"></canvas>
+            </div>
+        </section>
+
+        <section class="analytics-card insights-card">
+            <div class="card-header">
+                <div>
+                    <h2>Insights</h2>
+                    <p>What your spending tells you</p>
+                </div>
+            </div>
+
+            <div class="insights-list">
+
+                <div class="insight-item">
+                    <div class="insight-icon">✓</div>
+                    <div>
+                        <strong>Food is your highest spending category</strong>
+                        <p>You spent £72.40 on food this month.</p>
+                    </div>
+                </div>
+
+                <div class="insight-item">
+                    <div class="insight-icon">↓</div>
+                    <div>
+                        <strong>Your spending increased</strong>
+                        <p>You spent £45.54 more than last month.</p>
+                    </div>
+                </div>
+
+                <div class="insight-item">
+                    <div class="insight-icon">£</div>
+                    <div>
+                        <strong>Average daily spending</strong>
+                        <p>Your average spending is £6.96 per active day.</p>
+                    </div>
+                </div>
+
+                <div class="insight-item">
+                    <div class="insight-icon">!</div>
+                    <div>
+                        <strong>Shopping is worth monitoring</strong>
+                        <p>Shopping accounts for 17.5% of your spending.</p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </div>
+
+</div>
+
+
+
+<script>
+ const monthlyComparison = document.getElementById("monthlyComparison");
+
+if (monthlyComparison) {
+    new Chart(monthlyComparison, {
+        type: "bar",
+        data: {
+            labels: [
+                "Food",
+                "Transport",
+                "Shopping",
+                "Subscription",
+                "Entertainment",
+                "Bills"
+            ],
+            datasets: [
+                {
+                    label: "This Month",
+                    data: [
+                        {{ category_totals["Food"] }},
+                        {{ category_totals["Transport"] }},
+                        {{ category_totals["Shopping"] }},
+                        {{ category_totals["Subscription"] }},
+                        {{ category_totals["Entertainment"] }},
+                        {{ category_totals["Bills"] }}
+                    ],
+                    backgroundColor: "#4ade80",
+                    borderRadius: 6,
+                    borderSkipped: false
+                },
+                {
+                    label: "Last Month",
+                    data: [
+                        60.20,
+                        42.50,
+                        29.75,
+                        15.00,
+                        20.00,
+                        32.00
+                    ],
+                    backgroundColor: "#64748b",
+                    borderRadius: 6,
+                    borderSkipped: false
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        color: "#8c9a95",
+                        callback: function(value) {
+                            return "£" + value;
+                        }
+                    },
+                    grid: {
+                        color: "rgba(255, 255, 255, 0.06)"
+                    }
+                },
+                x: {
+                    ticks: {
+                        color: "#8c9a95"
+                    },
+                    grid: {
+                        display: false
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    labels: {
+                        color: "#aeb8b3",
+                        usePointStyle: true,
+                        pointStyle: "circle"
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return context.dataset.label + ": £" + context.parsed.y.toFixed(2);
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
+const categoryDonutChart = document.getElementById("categoryDonutChart");
+
+
+if(categoryDonutChart) {
+    new Chart(categoryDonutChart, {
+    type: "doughnut",
+    data: {
+        labels: [
+        "Food",
+        "Transport",
+        "Shopping",
+        "Subscription",
+        "Entertainment",
+        "Bills",
+        "Other"
+    ],
+    datasets: [{
+        label: "Spending",
+        data: [
+            {{ category_totals.get("Food", 0) }},
+            {{ category_totals.get("Transport", 0) }},
+            {{ category_totals.get("Shopping", 0) }},
+            {{ category_totals.get("Subscription", 0) }},
+            {{ category_totals.get("Entertainment", 0) }},
+            {{ category_totals.get("Bills", 0) }},
+            {{ category_totals.get("Other", 0) }}
+        ],
+        backgroundColor: [
+            "#42db6d",
+            "#5091f9",
+            "#f97c2f",
+            "#801ccc",
+            "#f7232e",
+            "#f704df",
+            "#3ad1e2"
+        ],
+        borderColor: "#121627",
+        cutout: "55%"
+    }]
+    },
+
+    options: {
+        plugins: {
+            legend: {
+                display: false
+            },
+        
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        return context.label + ": £" + context.parsed.toFixed(2);
+                    }
+                }
+            }
+        }
+    }
+});
+
+}
+
+
+
+
+
+</script>
+
+</body>
+</html>
+
+
+{% endblock %}

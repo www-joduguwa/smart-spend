@@ -3,11 +3,92 @@ from models import db, User, Expense
 from os import path
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, login_required, logout_user, current_user, LoginManager
-from datetime import datetime
+from datetime import datetime, timedelta
 import json
 
 
 DB_NAME = 'models.db'
+
+
+def calculate_expense_stats(expenses):
+
+    total_spent = sum(expense.amount for expense in expenses)
+    today = datetime.now().date()
+    month_start = today.replace(day=1)
+    week_start = today - timedelta(days=today.weekday())
+
+    monthly_spent = sum(
+        expense.amount
+        for expense in expenses
+        if expense.date.date() >= month_start
+    )
+
+    weekly_spent = sum(
+        expense.amount
+        for expense in expenses
+        if expense.date.date() >= week_start
+    )
+
+    if expenses:
+
+        dates = {
+            expense.date.date()
+            for expense in expenses
+        }
+
+        average_daily = total_spent / len(dates)
+
+    else:
+        average_daily = 0
+
+
+    expense_count = len(expenses)
+
+
+    # Category totals
+
+    category_totals = {
+        "Food": 0,
+        "Transport": 0,
+        "Subscription": 0,
+        "Shopping": 0,
+        "Entertainment": 0,
+        "Bills": 0,
+        "Other": 0
+    }
+
+    for expense in expenses:
+
+        if expense.category in category_totals:
+            category_totals[expense.category] += expense.amount
+
+    if category_totals:
+
+        top_category = max(
+            category_totals,
+            key=category_totals.get
+        )
+
+        top_category_amount = category_totals[
+            top_category
+        ]
+
+    else:
+
+        top_category = "None"
+        top_category_amount = 0
+
+
+    return {
+        "total_spent": total_spent,
+        "monthly_spent": monthly_spent,
+        "weekly_spent": weekly_spent,
+        "average_daily": average_daily,
+        "expense_count": expense_count,
+        "top_category": top_category,
+        "top_category_amount": top_category_amount,
+        "category_totals": category_totals
+    }
 
 
 def create_app():
@@ -34,6 +115,9 @@ def create_app():
 
     @app.route("/")
     def home():
+        if current_user.is_authenticated:
+            return redirect(url_for('dashboard'))
+        
         return render_template("home.html")
 
 
@@ -88,14 +172,18 @@ def create_app():
     @login_required
     def dashboard():
         expenses = Expense.query.filter_by(user_id=current_user.id).order_by(Expense.date.desc()).all()
-        return render_template("dashboard.html", expenses=expenses) 
+        stats = calculate_expense_stats(expenses)
+
+        return render_template("dashboard.html", expenses=expenses, **stats) 
 
 
     @app.route("/expenses")
     @login_required
     def expenses():
         expenses = Expense.query.filter_by(user_id=current_user.id).order_by(Expense.date.desc()).all()
-        return render_template("expenses.html", expenses=expenses)
+        stats = calculate_expense_stats(expenses)
+
+        return render_template("expenses.html", expenses=expenses, **stats)
 
 
     @app.route("/expenses/add", methods=["POST", "GET"])
@@ -134,16 +222,41 @@ def create_app():
         return jsonify({})
     
     
-
+    @app.route("/edit-expense/<int:expense_id>", methods=["GET", "POST"])
+    def edit_expense(expense_id):
+        expense = Expense.query.get_or_404(expense_id)
+        if request.method == "POST":
+            expense.title = request.form["title"]
+            expense.amount = float(request.form["amount"])
+            expense.category = request.form["category"]
+            expense.date = datetime.strptime(request.form["date"],"%Y-%m-%d").date()
+            expense.notes = request.form.get("notes", "")
+            db.session.commit()
+            return redirect(url_for("expenses"))
+        
+        return render_template("edit_expense.html", expense=expense)
 
     @app.route("/analytics")
     @login_required
     def analytics():
-        return render_template("analytics.html")
+
+        expenses = Expense.query.filter_by(user_id=current_user.id).order_by(Expense.date.desc()).all()
+        stats = calculate_expense_stats(expenses)
+
+        expense_data = [
+        {
+            "category": expense.category,
+            "amount": float(expense.amount),
+            "date": expense.date.strftime("%Y-%m-%d")
+        }
+        for expense in expenses
+        
+        ]
+
+
+        return render_template("analytics.html", expenses=expenses, **stats)
 
     return app
-
-
 
 app = create_app()
 

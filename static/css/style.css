@@ -700,6 +700,351 @@ th {
     color: #3cfbe1;
 }
 
+.filter-bar .account-dropdown { 
+    position: absolute; 
+    display: grid;
+    row-gap: 5px; 
+    min-width: 220px; 
+    padding: 8px; 
+    background: rgba(0, 0, 0, 0); 
+    border: 1px solid var(--border); 
+    border-radius: 16px; 
+    box-shadow: var(--shadow); 
+    backdrop-filter: blur(18px); 
+}
+
+.filter-bar .account-trigger {
+    background: #ffffff05;
+    border: 1px solid #dcdde51a;
+    color: var(--muted);
+    font-size: 0.85rem; 
+    height: 100%;
+}
+
+
+.account-trigger { 
+    display: inline-flex; 
+    align-items: center; 
+    gap: 8px; padding: 8px 12px; 
+    color: var(--text); 
+    background: rgba(255, 255, 255, 0.045); 
+    border: 1px solid var(--border); 
+    border-radius: 999px; 
+    cursor: pointer; 
+    font-size: 0.9rem; 
+    font-weight: 700; 
+    list-style: none; 
+    transition: border-color 160ms ease, background 160ms ease; 
+}
+
+.account-trigger svg {
+    width: 18px; 
+    height: 18px; 
+    color: var(--accent); 
+}
+
+.account-trigger:hover, 
+.account-menu[open] .account-trigger {
+    background: rgba(104, 204, 154, 0.1); 
+    border-color: rgba(104, 204, 154, 0.35); 
+}
+/* date-picker.css */
+
+.date-picker {
+    position: relative;
+    width: 100%;
+    max-width: 220px;
+    font-family: inherit;
+}
+
+.date-picker label {
+    display: block;
+    margin-bottom: 8px;
+
+    font-size: 13px;
+    font-weight: 600;
+    color: #34443b;
+}
+
+/* Input */
+
+.date-input-wrapper {
+    display: flex;
+    align-items: center;
+
+    width: 100%;
+    height: 42px;
+
+    background: #ffffff05;
+
+    border: 1px solid #dcdde52d;
+    border-radius: 999px;
+
+    transition: all 0.2s ease;
+}
+
+.date-input-wrapper:focus-within {
+    border-color: #5ca77a;
+    box-shadow: 0 0 0 3px rgba(92, 167, 122, 0.12);
+}
+
+.date-input-wrapper input {
+    flex: 1;
+
+    width: 100%;
+    height: 100%;
+
+    padding: 0 14px;
+
+    border: none;
+    outline: none;
+
+    background: transparent;
+    color: var(--muted);
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.date-input-wrapper input::placeholder {
+    font-weight: 700;
+    color: var(--muted);
+}
+
+/* Calendar icon */
+
+.calendar-toggle {
+    width: 46px;
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: none;
+    background: transparent;
+
+    cursor: pointer;
+
+    color: var(--accent);
+}
+
+.calendar-toggle svg {
+    width: 19px;
+    height: 19px;
+
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+
+    transition: transform 0.2s ease;
+}
+
+.calendar-toggle:hover svg {
+    transform: scale(1.08);
+}
+
+/* Calendar */
+
+.calendar {
+    position: absolute;
+
+    top: calc(100% + 8px);
+    left: -10px;
+    padding: 18px;
+    border: 1px solid var(--border); 
+    border-radius: 16px; 
+    box-shadow: var(--shadow); 
+    backdrop-filter: blur(18px); 
+    box-shadow:
+        0 15px 35px rgba(35, 62, 46, 0.12);
+    z-index: 100;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-5px);
+    transition:
+        opacity 0.18s ease,
+        transform 0.18s ease,
+        visibility 0.18s ease;
+}
+
+.calendar.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+/* Header */
+
+.calendar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 18px;
+}
+
+.month-year {
+    font-size: 15px;
+    font-weight: 650;
+
+    color: #90cdac;
+}
+
+/* Month buttons */
+
+.month-btn {
+    width: 32px;
+    height: 32px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: none;
+    border-radius: 8px;
+
+    background: transparent;
+
+    color: #80af93;
+
+    font-size: 23px;
+    line-height: 1;
+
+    cursor: pointer;
+
+    transition: all 0.15s ease;
+}
+
+.month-btn:hover {
+    background: #edf5ef;
+    color: #224330;
+}
+
+/* Weekdays */
+
+.weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+
+    margin-bottom: 7px;
+}
+
+.weekdays span {
+    text-align: center;
+
+    font-size: 10px;
+    font-weight: 600;
+
+    color: #a4b3a9;
+
+    text-transform: uppercase;
+}
+
+/* Calendar days */
+
+.calendar-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+
+    gap: 4px;
+}
+
+/* Individual dates */
+
+.calendar-day {
+    width: 32px;
+    height: 32px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: none;
+    border-radius: 50%;
+
+    background: transparent;
+
+    color: #6d8879;
+
+    font-family: inherit;
+    font-size: 12px;
+
+    cursor: pointer;
+
+    transition:
+        background 0.15s ease,
+        color 0.15s ease;
+}
+
+.calendar-day:hover {
+    background: #edf5ef;
+    color: #397151;
+}
+
+/* Empty days */
+
+.calendar-day.empty {
+    cursor: default;
+}
+
+/* Days outside current month */
+
+.calendar-day.other-month {
+    color: #c8d0cb;
+}
+
+/* Today */
+
+.calendar-day.today {
+    border: 1px solid #68a77f;
+    color: #4c8b65;
+    font-weight: 600;
+}
+
+/* Selected date */
+
+.calendar-day.selected {
+    background: #74d79a;
+    color: white;
+    font-weight: 600;
+}
+
+.calendar-day.selected:hover {
+    background: #43845c;
+    color: white;
+}
+
+/* Today button */
+
+.today-btn {
+    width: 100%;
+
+    margin-top: 15px;
+    padding: 8px;
+
+    border: none;
+    border-radius: 8px;
+
+    background: var(--accent);
+
+    color: #ffffff;
+
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: background 0.15s ease;
+}
+
+.today-btn:hover {
+    background: #e1eee5;
+}
+
+
+
+
 /* =========================
    ADD EXPENSE FORM
 ========================= */
@@ -843,6 +1188,672 @@ form label {
 
 .form-page-section .analytics-card {
     height: 100%;
+}
+
+/* =========================
+   CATEGORY MENU
+========================= */
+
+.category-field {
+    width: 100%;
+}
+
+.category-field > label {
+    display: block;
+    margin-bottom: 8px;
+
+    color: var(--text);
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+
+/* Main button */
+
+.category-menu {
+    position: relative;
+    width: 100%;
+}
+
+
+/* Remove default marker */
+
+.category-trigger {
+    list-style: none;
+}
+
+.category-trigger::-webkit-details-marker {
+    display: none;
+}
+
+
+/* Button */
+
+.category-trigger {
+    width: 100%;
+    height: 48px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 18px 0 20px;
+
+    border: 1px solid var(--border);
+    border-radius: 30px;
+
+    background: rgba(255, 255, 255, 0.025);
+
+    color: var(--muted);
+
+    font-size: 14px;
+
+    cursor: pointer;
+
+    box-shadow: var(--shadow);
+
+    transition:
+        border-color 0.2s ease,
+        background 0.2s ease,
+        color 0.2s ease;
+}
+
+
+/* Hover */
+
+.category-trigger:hover {
+    border-color: rgba(104, 204, 154, 0.35);
+
+    background: rgba(255, 255, 255, 0.035);
+}
+
+
+/* Open state */
+
+.category-menu[open] .category-trigger {
+    border-color: rgba(104, 204, 154, 0.55);
+
+    color: var(--text);
+
+    box-shadow:
+        0 0 0 4px rgba(104, 204, 154, 0.08),
+        var(--shadow);
+}
+
+
+/* Chevron */
+
+.category-trigger svg {
+    color: var(--accent);
+
+    transition: transform 0.2s ease;
+}
+
+.category-menu[open] .category-trigger svg {
+    transform: rotate(180deg);
+}
+
+
+/* Dropdown */
+
+.category-dropdown {
+    position: absolute;
+
+    top: calc(100% + 8px);
+    left: 0;
+
+    width: 100%;
+
+    padding: 7px;
+
+    background: #14231c;
+
+    border: 1px solid var(--border);
+
+    border-radius: 14px;
+
+    box-shadow:
+        0 18px 40px rgba(0, 0, 0, 0.35);
+
+    z-index: 100;
+}
+
+
+/* Options */
+
+.category-option {
+    display: flex;
+    align-items: center;
+
+    width: 100%;
+
+    padding: 10px 12px;
+
+    border-radius: 9px;
+
+    color: var(--text);
+
+    font-size: 13px;
+
+    cursor: pointer;
+
+    transition:
+        background 0.15s ease,
+        color 0.15s ease;
+}
+
+
+.category-option:hover {
+    background: rgba(104, 204, 154, 0.1);
+
+    color: var(--accent);
+}
+
+
+/* Hide radio */
+
+.category-option input {
+    position: absolute;
+
+    opacity: 0;
+
+    pointer-events: none;
+}
+
+
+/* Selected option */
+
+.category-option:has(input:checked) {
+    background: rgba(104, 204, 154, 0.12);
+
+    color: var(--accent);
+}
+
+
+/* Keep text aligned */
+
+.category-option span {
+    width: 100%;
+}
+
+/* =========================
+   ADD EXPENSE DATE PICKER
+========================= */
+
+.form-date-picker {
+    position: relative;
+    width: 100%;
+    margin-top: 5px;
+}
+
+
+/* Input container */
+
+.form-date-picker .date-input-wrapper {
+    width: 100%;
+    height: 48px;
+
+    display: flex;
+    align-items: center;
+
+    background: rgba(255, 255, 255, 0);
+
+    border: 1px solid var(--border);
+    border-radius: 30px;
+
+    box-shadow: var(--shadow);
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+
+/* Focus */
+
+.form-date-picker .date-input-wrapper:focus-within {
+    border-color: rgba(104, 204, 154, 0.55);
+
+    background: rgba(255, 255, 255, 0.035);
+
+    box-shadow:
+        0 0 0 4px rgba(104, 204, 154, 0.08),
+        var(--shadow);
+}
+
+
+/* Date input */
+
+.form-date-picker #dateInput {
+    flex: 1;
+    width: 100%;
+    height: 100%;
+    padding: 10px 20px;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: var(--text);
+    font-family:
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+    font-size: 14px;
+
+    cursor: pointer;
+}
+
+
+/* Placeholder */
+
+.form-date-picker #dateInput::placeholder {
+    color: var(--muted);
+    font-weight: normal;
+}
+
+
+/* Calendar button */
+
+.form-date-picker .calendar-toggle {
+    width: 48px;
+    height: 48px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: none;
+
+    background: transparent;
+
+    color: var(--accent);
+
+    cursor: pointer;
+}
+
+
+/* Calendar icon */
+
+.form-date-picker .calendar-toggle svg {
+    width: 18px;
+    height: 18px;
+
+    fill: none;
+
+    stroke: currentColor;
+
+    stroke-width: 1.8;
+
+    transition:
+        transform 0.2s ease,
+        color 0.2s ease;
+}
+
+.form-date-picker .calendar-toggle:hover svg {
+    transform: scale(1.08);
+    color: #8ae0b0;
+}
+
+
+/* =========================
+   CALENDAR DROPDOWN
+========================= */
+
+.form-date-picker .calendar {
+    position: absolute;
+    top: calc(100% + 10px);
+    left: 0;
+    width: 300px;
+    padding: 18px;
+    border: 1px solid var(--border);
+
+    border-radius: 18px;
+
+    box-shadow:
+        0 24px 60px rgba(0, 0, 0, 0.45);
+
+    backdrop-filter: blur(18px);
+
+    z-index: 100;
+
+    opacity: 0;
+    visibility: hidden;
+
+    transform: translateY(-6px);
+
+    transition:
+        opacity 0.18s ease,
+        transform 0.18s ease,
+        visibility 0.18s ease;
+}
+
+
+.form-date-picker .calendar.active {
+    opacity: 1;
+
+    visibility: visible;
+
+    transform: translateY(0);
+}
+
+
+/* Calendar header */
+
+.form-date-picker .calendar-header {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin-bottom: 16px;
+}
+
+
+.form-date-picker .month-year {
+    color: var(--text);
+
+    font-size: 14px;
+
+    font-weight: 700;
+}
+
+
+/* Previous / next */
+
+.form-date-picker .month-btn {
+    width: 32px;
+    height: 32px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: none;
+
+    border-radius: 9px;
+
+    background: transparent;
+
+    color: var(--muted);
+
+    font-size: 22px;
+
+    line-height: 1;
+
+    cursor: pointer;
+
+    transition:
+        background 0.15s ease,
+        color 0.15s ease;
+}
+
+
+.form-date-picker .month-btn:hover {
+    background: rgba(104, 204, 154, 0.1);
+
+    color: var(--accent);
+}
+
+
+/* Weekdays */
+
+.form-date-picker .weekdays {
+    display: grid;
+
+    grid-template-columns:
+        repeat(7, 1fr);
+
+    margin-bottom: 7px;
+}
+
+
+.form-date-picker .weekdays span {
+    text-align: center;
+
+    color: var(--muted);
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    text-transform: uppercase;
+}
+
+
+/* Calendar days */
+
+.form-date-picker .calendar-days {
+    display: grid;
+
+    grid-template-columns:
+        repeat(7, 1fr);
+
+    gap: 4px;
+}
+
+
+/* Individual date */
+
+.form-date-picker .calendar-day {
+    width: 32px;
+    height: 32px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    margin: auto;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background: transparent;
+
+    color: #b8c8bf;
+
+    font-family: inherit;
+
+    font-size: 12px;
+
+    cursor: pointer;
+
+    transition:
+        background 0.15s ease,
+        color 0.15s ease;
+}
+
+
+.form-date-picker .calendar-day:hover {
+    background: rgba(104, 204, 154, 0.12);
+
+    color: var(--accent);
+}
+
+
+/* Empty cells */
+
+.form-date-picker .calendar-day.empty {
+    cursor: default;
+}
+
+
+/* Today */
+
+.form-date-picker .calendar-day.today {
+    border: 1px solid var(--accent);
+
+    color: var(--accent);
+
+    font-weight: 700;
+}
+
+
+/* Selected */
+
+.form-date-picker .calendar-day.selected {
+    background: var(--accent);
+
+    color: #08110d;
+
+    font-weight: 700;
+}
+
+
+.form-date-picker .calendar-day.selected:hover {
+    background: #83dda8;
+
+    color: #08110d;
+}
+
+
+/* Today button */
+
+.today-btn {
+    width: 100%;
+
+    margin-top: 15px;
+
+    padding: 8px 12px;
+
+    border: 1px solid rgba(104, 204, 154, 0.2);
+
+    border-radius: 9px;
+
+    background: rgba(104, 204, 154, 0.08);
+
+    color: var(--accent);
+
+    font-family: inherit;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        background 0.15s ease,
+        border-color 0.15s ease;
+}
+
+
+.form-date-picker .today-btn:hover {
+    background: rgba(104, 204, 154, 0.15);
+
+    border-color: rgba(104, 204, 154, 0.35);
+}
+
+
+/* EDIT EXPENSE */
+
+.form-notes {
+    grid-column: 1 / -1;
+    width: 100%;
+}
+
+.form-notes textarea {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.form-category-picker {
+    position: relative;
+    width: 100%;
+}
+
+.form-buttons .category-label {
+    margin-bottom: 223px;
+    box-sizing: border-box;
+}
+
+.category-menu {
+    position: relative;
+    width: 100%;
+}
+
+.category-trigger {
+    margin-top: 5px;
+    margin-bottom: 17px;
+    box-sizing: border-box;
+    width: 100%;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 18px;
+    border: 1px solid var(--border);
+    border-radius: 30px;
+    background: rgba(255, 255, 255, 0);
+    color: var(--text);
+    cursor: pointer;
+    list-style: none;
+}
+
+.category-trigger::-webkit-details-marker {
+    display: none;
+}
+
+.category-trigger svg {
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+}
+
+.category-menu[open] .category-trigger svg {
+    transform: rotate(180deg);
+}
+
+
+/* Dropdown */
+
+.category-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 6px;
+    backdrop-filter: blur(25px);
+    background: rgba(0, 0, 0, 0.017);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+    z-index: 1000;
+}
+
+
+/* Options */
+
+.category-dropdown button {
+    display: block;
+    width: 100%;
+    padding: 11px 14px;
+    border: none;
+    border-radius: 9px;
+    background: transparent;
+    color: var(--text);
+    font-family: inherit;
+    font-size: 14px;
+    text-align: left;
+    cursor: pointer;
+    transition:
+        background 0.15s ease,
+        color 0.15s ease;
+}
+
+.category-dropdown button:hover {
+    background: rgba(104, 204, 154, 0.1);
+    color: var(--accent);
 }
 
 /* =========================
@@ -1103,7 +2114,7 @@ form label {
 .dashboard-top {
     margin-top: 30px;
     grid-template-columns: 1fr 1fr 1fr 1fr;
-    column-gap: 1rem;
+    column-gap: 1.5rem;
 }
 
 .top-analytics{ 
@@ -1117,9 +2128,9 @@ form label {
 }
 
 .dashboard-mid {
-    margin-top: 1rem;
+    margin-top: 1.5rem;
     grid-template-columns: 1fr 1fr;
-    column-gap: 1rem;
+    column-gap: 1.5rem;
 }
 
 .dashboard-mid h4 {
@@ -1132,21 +2143,34 @@ form label {
     display: flex;
     justify-content: space-between;
     align-items: baseline;
+    margin-bottom: 10px;
 
 }
 
-.card-header .alt-text {
+.dashboard-mid .alt-text {
     padding: 8px 12px;
     border-radius: 10px;
 
 }
 
-.card-header .alt-text:hover {
+.dashboard-mid .section-body svg {
+    padding: 3px;
+}
+
+.dashboard-mid .alt-text:hover {
     background: rgba(104, 204, 154, 0.078);;
     color: rgb(167, 236, 201);
     padding: 8px 12px;
     border-radius: 10px;
     box-shadow: 0 10px 30px rgba(5, 8, 11, 0.355);
+}
+
+.dashboard-mid .analytics-card {
+    padding-bottom: 12px;
+}
+
+.analytics-card .section-body {
+    padding-top: 10px;
 }
 
 .card-body {
@@ -1170,6 +2194,7 @@ form label {
 .category,
 .tdata {
         padding: 0 0;
+        font-size: 14px;
 
 }
 
@@ -1181,7 +2206,7 @@ form label {
     background-color: #4ade80;
     border: none;
     border-radius: 999px;
-    padding: 7px 7px;
+    padding: 5px 5px;
 }
 
 .category {
@@ -1192,7 +2217,7 @@ form label {
 
 .donut-totals {
     left: 185px;
-    top: 635px;
+    top: 615px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1209,8 +2234,58 @@ form label {
     font-size: 18px;
 }
 
+.analytics-card table {
+    width: 100%;
+    border: none;
+    overflow: hidden;
+
+}
+
+.analytics-card td {
+    border-left: none;
+    
+}
+
+.analytics-card .category-badge {
+    font-size: 12px;
+    padding: 0.2rem 0.4rem;
+}
 
 
+.analytics-card .expense-amount {
+    font-weight: 700;
+    font-size: 11.5px;
+}
+
+.dashboard-end {
+    margin-top: 1.5rem;
+    grid-template-columns: 1fr 1fr 1fr;
+    column-gap: 1.5rem;
+}
+
+h5 {
+    margin: 0;
+    font-size: 16px;
+}
+
+.top-category-body {
+    display: flex;
+    flex-direction: row;
+    gap: 14px;
+}
+
+.top-category-body h4 {
+    font-weight: normal;
+    font-size: 20px;
+    margin: 0;
+}
+
+.top-category-icon svg {
+    padding: 12px;
+    background: rgba(34, 197, 94, 0.18);
+    border-radius: 25px;
+    color: #4ade80;
+}
 /* =========================
    ROADMAP
 ========================= */
@@ -1574,3 +2649,328 @@ form label {
 
 .flash-message--message { border-color: rgba(96, 165, 250, 0.4); }
 .flash-message--message .flash-icon { color: #bfdbfe; background: rgba(96, 165, 250, 0.15); } .flash-message--message .flash-icon::before { content: "!"; }
+
+
+/* =====================================================
+   ANALYTICS PAGE
+===================================================== */
+
+.analytics-page {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 32px 40px 60px;
+    box-sizing: border-box;
+}
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.analytics-header {
+    display: flex;
+    align-items: baseline;
+    margin-bottom: 28px;
+
+}
+
+.analytics-header h2 {
+    margin-bottom: 5px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+.filter-group p {
+    color: #8f9b96;
+    font-size: 14px;
+    display: flex;
+    white-space: nowrap;
+}
+
+.button.tertiary svg {
+    padding: 2px 2px;
+    margin-right: 3px;
+}
+
+/* =====================================================
+   FILTERS
+===================================================== */
+
+.analytics-filters {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    justify-content: space-between;
+    margin-bottom: 24px;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: row;
+    gap: 7px;
+}
+
+.filter-group label {
+    color: #8f9b96;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.filter-group select,
+.category-card select {
+    min-width: 150px;
+    padding: 10px 34px 10px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 9px;
+    outline: none;
+    background: #11191a;
+    color: #e8efec;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.filter-group select:focus,
+.category-card select:focus {
+    border-color: rgba(74, 222, 128, 0.45);
+}
+
+
+/* =====================================================
+   GRID
+===================================================== */
+
+.analytics-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.analytics-grid h4 {
+    font-size: 18px;
+    margin: 0 0;
+}
+
+/* =====================================================
+   CARDS
+===================================================== */
+
+.analytics-card {
+    min-width: 0;
+    padding: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.025);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+    box-sizing: border-box;
+}
+
+.analytics-card .category-trigger {
+    margin: 0 0;
+    width: 150px;
+}
+
+.analytics-card .category-dropdown {
+    max-width: 200px;
+    background: rgb(7, 22, 28);
+}
+
+
+.analytics-grid .card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.card-header h2 {
+    margin: 0 0 6px;
+    color: #f1f5f3;
+    font-size: 17px;
+    font-weight: 600;
+}
+
+.card-header p {
+    margin: 0;
+    color: #7f8c87;
+    font-size: 12px;
+}
+
+
+
+/* =====================================================
+   SPENDING CHART
+===================================================== */
+
+.comparison-chart {
+    position: relative;
+    height: 300px;
+}
+
+.spending-card {
+    min-height: 390px;
+}
+
+.chart-container {
+    position: relative;
+    width: 100%;
+    height: 275px;
+}
+
+.dummy-line-chart {
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
+.chart-y-axis {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 42px;
+    padding: 5px 0 25px;
+    box-sizing: border-box;
+}
+
+.chart-y-axis span {
+    color: #687570;
+    font-size: 10px;
+}
+
+.chart-area {
+    position: relative;
+    flex: 1;
+    height: 100%;
+}
+
+.chart-grid-lines {
+    position: absolute;
+    inset: 5px 0 25px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.chart-grid-lines span {
+    width: 100%;
+    border-top: 1px solid rgba(255, 255, 255, 0.055);
+}
+
+.line-chart {
+    position: absolute;
+    inset: 5px 0 25px;
+    width: 100%;
+    height: calc(100% - 30px);
+    overflow: visible;
+}
+
+.line-chart polyline {
+    fill: none;
+    stroke: #4ade80;
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    filter: drop-shadow(0 0 6px rgba(74, 222, 128, 0.18));
+}
+
+.chart-x-axis {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+.chart-x-axis span {
+    color: #687570;
+    font-size: 10px;
+}
+
+
+/* =====================================================
+   CATEGORY
+===================================================== */
+
+.category-card {
+    min-height: 390px;
+}
+
+.category-content {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 24px;
+    align-items: center;
+}
+
+.donut-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dummy-donut {
+    position: relative;
+    width: 170px;
+    height: 170px;
+    border-radius: 50%;
+    background: conic-gradient(
+        #4ade80 0deg 124deg,
+        #60a5fa 124deg 206deg,
+        #a78bfa 206deg 269deg,
+        #f59e0b 269deg 317deg,
+        #ef4444 317deg 360deg
+    );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dummy-donut::after {
+    content: "";
+    position: absolute;
+    width: 112px;
+    height: 112px;
+    border-radius: 50%;
+    background: #101718;
+}
+
+.donut-center {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.donut-center span {
+    color: #7f8c87;
+    font-size: 11px;
+}
+
+.donut-center strong {
+    color: #f1f5f3;
+    font-size: 18px;
+}
+
+
+.category-legend {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.category-legend-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.legend-category {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    color: #c7d0cc;
+    font-size: 12
