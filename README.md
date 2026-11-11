@@ -90,7 +90,7 @@ Through building SmartSpend, I developed experience with:
 
 ![Home](screenshots/home.png)
 
-## Add Expense
+## Dashboard
 
 ![Dashboard](screenshots/dashboard.png)
 
