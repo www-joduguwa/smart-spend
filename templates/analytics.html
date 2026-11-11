@@ -4,7 +4,6 @@
 
 {% block content %}
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="{{ url_for('static', filename='js/script.js') }}"></script>
 
 <div class="analytics-page">
     <div class="analytics-header">
@@ -24,50 +23,21 @@
             <div class="card-header">
                 <div>
                     <h4>Spending Over Time</h4>
-                    <p>Daily spending this month</p>
+                    <p>Daily spending · {{ chart_month }}</p>
                 </div>
             </div>
 
             <div class="chart-container">
-                <div class="dummy-line-chart">
-                    <div class="chart-y-axis">
-                        <span>£40</span>
-                        <span>£30</span>
-                        <span>£20</span>
-                        <span>£10</span>
-                        <span>£0</span>
-                    </div>
-
-                    <div class="chart-area">
-                        <div class="chart-grid-lines">
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                        </div>
-
-                        <svg class="line-chart" viewBox="0 0 700 260" preserveAspectRatio="none">
-                            <polyline
-                                points="0,190 70,160 140,180 210,120 280,145 350,95 420,115 490,70 560,100 630,55 700,80"
-                            />
-                        </svg>
-
-                        <div class="chart-x-axis">
-                            <span>1 Aug</span>
-                            <span>7 Aug</span>
-                            <span>14 Aug</span>
-                            <span>21 Aug</span>
-                            <span>28 Aug</span>
-                        </div>
-                    </div>
-                </div>
+                <canvas id="dailySpendingChart" aria-label="Daily spending for {{ chart_month }}" role="img"></canvas>
             </div>
         </section>
 
         <section class="analytics-card category-card">
                 <div class="card-header">
-                    <h4 style="margin-top: 5px;">Spending by Category</h4>
+                    <div>
+                        <h4 style="margin-top: 5px;">Spending by Category</h4>
+                        <p>Your spending across different catgories</p>
+                    </div>
                     <div>
                             <details class="category-menu">
                                 <summary class="category-trigger">
@@ -97,6 +67,10 @@
                 </div>
                 <div class="card-body">
                     <div>
+                        <div class="donut-totals" style="left: 100px; top: 185px;">
+                            <p>Total</p>
+                            <h4>£{{ "{:,.2f}".format(total_spent) }}</h4>
+                        </div>
                         <canvas id="categoryDonutChart"> </canvas>
                     </div>
                     <div class="table">
@@ -213,7 +187,6 @@
 </div>
 
 
-
 <script>
  const monthlyComparison = document.getElementById("monthlyComparison");
 
@@ -307,7 +280,6 @@ if (monthlyComparison) {
 
 const categoryDonutChart = document.getElementById("categoryDonutChart");
 
-
 if(categoryDonutChart) {
     new Chart(categoryDonutChart, {
     type: "doughnut",
@@ -363,6 +335,63 @@ if(categoryDonutChart) {
     }
 });
 
+}
+
+ const dailySpendingCanvas = document.getElementById("dailySpendingChart");
+if (dailySpendingCanvas) {
+    const dailySpending = {{ daily_spending | tojson }};
+    const labels = dailySpending.map((_amount, index) => `Day ${index + 1}`);
+    const context = dailySpendingCanvas.getContext("2d");
+    const fill = context.createLinearGradient(0, 0, 0, 280);
+    fill.addColorStop(0, "rgba(74, 222, 128, 0.28)");
+    fill.addColorStop(1, "rgba(74, 222, 128, 0)");
+
+    new Chart(dailySpendingCanvas, {
+        type: "line",
+        data: {
+            labels,
+            datasets: [{
+                label: "Spending",
+                data: dailySpending,
+                borderColor: "#4ade80",
+                backgroundColor: fill,
+                fill: true,
+                tension: 0.35,
+                pointRadius: 2,
+                pointHoverRadius: 6,
+                pointBackgroundColor: "#4ade80",
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: { mode: "index", intersect: false },
+            scales: {
+                x: {
+                    ticks: { color: "#8c9a95", maxTicksLimit: 8 },
+                    grid: { display: false }
+                },
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        color: "#8c9a95",
+                        callback: value => `£${Number(value).toFixed(0)}`
+                    },
+                    grid: { color: "rgba(255, 255, 255, 0.06)" }
+                }
+            },
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        title: items => `Day ${items[0].dataIndex + 1}`,
+                        label: item => `Spent: £${item.parsed.y.toFixed(2)}`
+                    }
+                }
+            }
+        }
+    });
 }
 
 

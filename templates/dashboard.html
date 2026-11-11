@@ -3,6 +3,8 @@
 {% block title %}SmartSpend | Dashboard{% endblock %}
 
 {% block content %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <section class="dashboard-hero">
     <div class="hero-greeting">
         <p class="section-kicker">Dashboard</p>
@@ -92,57 +94,10 @@
                     <input type="hidden" id="category" name="category" required>
                 </div>
         </div>
-        <div class="card-body">
-            <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="75 100 290 310"
-                    width="250"
-                    height="250">
-
-                    <path
-                        d="M220 120 A140 140 0 0 1 353.9765731110299 300.6236120676738
-                        L293.6871152110665 282.3429866372206
-                        A77 77 0 0 0 220 183 Z"
-                        fill="#4ade80"
-                        stroke="#101825"
-                        stroke-width="3"/>
-
-                    <path
-                        d="M353.9765731110299 300.6236120676738
-                        A140 140 0 0 1 197.41236785868816 398.1658383040062
-                        L207.57680232227847 335.9912110672034
-                        A77 77 0 0 0 293.6871152110665 282.3429866372206 Z"
-                        fill="#60a5fa"
-                        stroke="#101825"
-                        stroke-width="3"/>
-
-                    <path
-                        d="M197.41236785868816 398.1658383040062
-                        A140 140 0 0 1 89.78919315962216 311.43098076041144
-                        L148.3840562377922 288.2870394182263
-                        A77 77 0 0 0 207.57680232227847 335.9912110672034 Z"
-                        fill="#fb923c"
-                        stroke="#101825"
-                        stroke-width="3"/>
-
-                    <path
-                        d="M89.78919315962216 311.43098076041144
-                        A140 140 0 0 1 95.0784496930849 196.79710236929893
-                        L151.29314733119668 225.2384063031144
-                        A77 77 0 0 0 148.3840562377922 288.2870394182263 Z"
-                        fill="#fb3ce5"
-                        stroke="#101825"
-                        stroke-width="3"/>
-
-                    <path
-                        d="M95.0784496930849 196.79710236929893
-                        A140 140 0 0 1 220 120
-                        L220 183
-                        A77 77 0 0 0 151.29314733119668 225.2384063031144 Z"
-                        fill="#fb3c3c"
-                        stroke="#101825"
-                        stroke-width="3"/>
-            </svg>
+        <div class="card-body" style="padding-bottom: 15px;">
+            <div>
+                <canvas id="categoryDonutChart"> </canvas>
+            </div>
             <div class="table">
                 <table>
                     <tbody>
@@ -257,6 +212,74 @@
         </div>
     </div>
 </section>
+
+<script>
+    const categoryDonutChart = document.getElementById("categoryDonutChart");
+
+
+    if(categoryDonutChart) {
+        new Chart(categoryDonutChart, {
+        type: "doughnut",
+        data: {
+            labels: [
+            "Food",
+            "Transport",
+            "Shopping",
+            "Subscription",
+            "Entertainment",
+            "Bills",
+            "Other"
+        ],
+        datasets: [{
+            label: "Spending",
+            data: [
+                {{ category_totals.get("Food", 0) }},
+                {{ category_totals.get("Transport", 0) }},
+                {{ category_totals.get("Shopping", 0) }},
+                {{ category_totals.get("Subscription", 0) }},
+                {{ category_totals.get("Entertainment", 0) }},
+                {{ category_totals.get("Bills", 0) }},
+                {{ category_totals.get("Other", 0) }}
+            ],
+            backgroundColor: [
+                "#42db6d",
+                "#5091f9",
+                "#f97c2f",
+                "#801ccc",
+                "#f7232e",
+                "#f704df",
+                "#3ad1e2"
+            ],
+            borderColor: "#121627",
+            cutout: "55%"
+        }]
+        },
+
+        options: {
+            plugins: {
+                legend: {
+                    display: false
+                },
+            
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return context.label + ": £" + context.parsed.toFixed(2);
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    }
+
+
+
+
+
+</script>
+
 <div class="donut-totals">
         <p>Total</p>
         <h4>£{{ "{:,.2f}".format(total_spent) }}</h4>

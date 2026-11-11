@@ -90,6 +90,10 @@ Through building SmartSpend, I developed experience with:
 
 ![Home](screenshots/home.png)
 
+## Add Expense
+
+![Dashboard](screenshots/dashboard.png)
+
 ## Expenses
 
 ![Expenses](screenshots/expenses.png)
@@ -97,6 +101,7 @@ Through building SmartSpend, I developed experience with:
 ## Add Expense
 
 ![Add Expense](screenshots/add-expense.png)
+
 
 ---
 

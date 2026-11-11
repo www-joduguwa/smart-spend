@@ -242,19 +242,22 @@ def create_app():
 
         expenses = Expense.query.filter_by(user_id=current_user.id).order_by(Expense.date.desc()).all()
         stats = calculate_expense_stats(expenses)
+        today = datetime.now().date()
+        days_in_month = (today.replace(day=28) + timedelta(days=4)).replace(day=1) - timedelta(days=1)
+        daily_spending = [0.0] * days_in_month.day
 
-        expense_data = [
-        {
-            "category": expense.category,
-            "amount": float(expense.amount),
-            "date": expense.date.strftime("%Y-%m-%d")
-        }
-        for expense in expenses
-        
-        ]
+        for expense in expenses:
+            expense_date = expense.date.date() if isinstance(expense.date, datetime) else expense.date
+            if expense_date.year == today.year and expense_date.month == today.month:
+                daily_spending[expense_date.day - 1] += float(expense.amount)
 
-
-        return render_template("analytics.html", expenses=expenses, **stats)
+        return render_template(
+            "analytics.html",
+            expenses=expenses,
+            daily_spending=daily_spending,
+            chart_month=today.strftime("%B %Y"),
+            **stats,
+        )
 
     return app
 
